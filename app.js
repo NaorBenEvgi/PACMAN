@@ -6,8 +6,9 @@ var pac_color;
 var start_time;
 var time_elapsed;
 var interval;
+var direction = 4;
 
-$(document).ready(function() {
+$(document).ready(function () {
 	context = canvas.getContext("2d");
 	Start();
 });
@@ -57,19 +58,19 @@ function Start() {
 	keysDown = {};
 	addEventListener(
 		"keydown",
-		function(e) {
+		function (e) {
 			keysDown[e.keyCode] = true;
 		},
 		false
 	);
 	addEventListener(
 		"keyup",
-		function(e) {
+		function (e) {
 			keysDown[e.keyCode] = false;
 		},
 		false
 	);
-	interval = setInterval(UpdatePosition, 250);
+	interval = setInterval(UpdatePosition, 150);
 }
 
 function findRandomEmptyCell(board) {
@@ -83,15 +84,22 @@ function findRandomEmptyCell(board) {
 }
 
 function GetKeyPressed() {
+	// up
 	if (keysDown[38]) {
 		return 1;
 	}
+
+	// down
 	if (keysDown[40]) {
 		return 2;
 	}
+
+	// left
 	if (keysDown[37]) {
 		return 3;
 	}
+
+	// right
 	if (keysDown[39]) {
 		return 4;
 	}
@@ -107,25 +115,11 @@ function Draw() {
 			center.x = i * 60 + 30;
 			center.y = j * 60 + 30;
 			if (board[i][j] == 2) {
-				context.beginPath();
-				context.arc(center.x, center.y, 30, 0.15 * Math.PI, 1.85 * Math.PI); // half circle
-				context.lineTo(center.x, center.y);
-				context.fillStyle = pac_color; //color
-				context.fill();
-				context.beginPath();
-				context.arc(center.x + 5, center.y - 15, 5, 0, 2 * Math.PI); // circle
-				context.fillStyle = "black"; //color
-				context.fill();
+				new Pacman(context).draw(center, direction);
 			} else if (board[i][j] == 1) {
-				context.beginPath();
-				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
-				context.fillStyle = "black"; //color
-				context.fill();
+				new Food(context).draw(center, "black")
 			} else if (board[i][j] == 4) {
-				context.beginPath();
-				context.rect(center.x - 30, center.y - 30, 60, 60);
-				context.fillStyle = "grey"; //color
-				context.fill();
+				new Wall(context).draw(center);
 			}
 		}
 	}
@@ -133,7 +127,8 @@ function Draw() {
 
 function UpdatePosition() {
 	board[shape.i][shape.j] = 0;
-	var x = GetKeyPressed();
+	var x = GetKeyPressed() || false && direction;
+	direction = x || direction;
 	if (x == 1) {
 		if (shape.j > 0 && board[shape.i][shape.j - 1] != 4) {
 			shape.j--;
@@ -163,10 +158,9 @@ function UpdatePosition() {
 	if (score >= 20 && time_elapsed <= 10) {
 		pac_color = "green";
 	}
+	Draw();
 	if (score == 50) {
 		window.clearInterval(interval);
 		window.alert("Game completed");
-	} else {
-		Draw();
 	}
 }
