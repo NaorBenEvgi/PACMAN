@@ -17,7 +17,8 @@ $(document).ready(function () {
 });
 
 function Start() {
-	board = new Array();
+	// board = new Array();
+	board = new Board(food_remain, monsterAmount, wallsAmount);
 	score = 0;
 	pac_color = "yellow";
 	var cnt = 100;
@@ -31,56 +32,14 @@ function Start() {
 	let wallsAmount = 100 - monsterAmount - food_remain;
 	var pacman_remain = 1;
 	start_time = new Date();
+
 	for (var i = 0; i < 10; i++) {
 		board[i] = new Array();
-		//put obstacles in (i=3,j=3) and (i=3,j=4) and (i=3,j=5), (i=6,j=1) and (i=6,j=2)
 		for (var j = 0; j < 10; j++) {
 			board[i][j] = 0;
 		}
 	}
 
-
-	//creating walls
-	var indexWallA = [1, 8, 1, 8, 3, 6, 3, 6, 4, 5, 4, 5, 4, 5, 0, 9, 0, 9, 2, 7, 2, 7, 1, 8, 1, 8];
-	var indexWallB = [1, 1, 8, 8, 5, 5, 6, 6, 6, 6, 2, 2, 3, 3, 4, 4, 5, 5, 1, 1, 8, 8, 2, 2, 7, 7];
-
-	for (var i = 0; i < indexWallA.length; i++) {
-		if (wallsAmount > 0) {
-			board[indexWallA[i]][indexWallB[i]] = 4;
-			wallsAmount--;
-		}
-	}
-
-	//placing pacman
-	var emptyCell = findRandomEmptyCell(board);
-	board[emptyCell[0]][emptyCell[1]] = 2;
-	shape.i = emptyCell[0];
-	shape.j = emptyCell[1];	
-	pacman_remain--;
-
-	//spreading the food
-	while (food_remain > 0) {
-		var emptyCell = findRandomEmptyCell(board);
-		if (food_remain_5 > 0) {
-			board[emptyCell[0]][emptyCell[1]] = 5;
-			food_remain_5--;
-			food_remain--;
-			continue;
-		}
-		if(food_remain_15 > 0) {
-			board[emptyCell[0]][emptyCell[1]] = 15;
-			food_remain_15--;
-			food_remain--;
-			continue;
-		  }
-		  if(food_remain_25 > 0) {
-			board[emptyCell[0]][emptyCell[1]] = 25;
-			food_remain_25--;
-			food_remain--;
-			continue;
-		  }
-	}
-	
 	keysDown = {};
 	addEventListener(
 		"keydown",
@@ -99,16 +58,6 @@ function Start() {
 	interval = setInterval(UpdatePosition, 150);
 }
 
-
-function findRandomEmptyCell(board) {
-	var i = Math.floor(Math.random() * 10);
-	var j = Math.floor(Math.random() * 10);
-	while (board[i][j] != 0) {
-		i = Math.floor(Math.random() * 10);
-		j = Math.floor(Math.random() * 10);
-	}
-	return [i, j];
-}
 
 function GetKeyPressed() {
 	// up
@@ -132,8 +81,12 @@ function GetKeyPressed() {
 	}
 }
 
+function clearBoard() {
+	context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 function Draw() {
-	canvas.width = canvas.width; //clean board
+	clearBoard();
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
 	for (var i = 0; i < 10; i++) {
@@ -149,7 +102,7 @@ function Draw() {
 				new Food(context).draw(center, 5, "red") //change the color to var
 			} else if (board[i][j] == 25) { //big food
 				new Food(context).draw(center, 10, "blue") //change the color to var
-			} else if (board[i][j] == 4) {
+			} else if (typeof board[i][j] === 'Wall') {
 				new Wall(context).draw(center);
 			}
 		}
@@ -189,7 +142,8 @@ function UpdatePosition() {
 		pac_color = "green";
 	}
 	Draw();
-	new Monster(context, monsterAmount).draw(monsterImg);
+	new Monster(context, monsterAmount).move(shape, board);
+	new Monster(context, monsterAmount).draw();
 	if (score == 50) { //change to var
 		window.clearInterval(interval);
 		window.alert("Game completed");
@@ -198,7 +152,7 @@ function UpdatePosition() {
 
 function updateScore(){
 	if(board[shape.i][shape.j] == 5 || board[shape.i][shape.j] == 15 || board[shape.i][shape.j] == 25){
-		score += board[shape.i][shape.j];
-		food_remain--;
+		this.score += board[shape.i][shape.j];
+		this.food_remain--;
 	}
 }

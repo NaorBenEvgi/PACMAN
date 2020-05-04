@@ -1,4 +1,6 @@
 const MAX_MONSTER_AMOUNT = 4;
+var monsterImg = new Image();
+monsterImg.src = 'resources/monster.png'
 
 class Monster {
 
@@ -9,9 +11,9 @@ class Monster {
         this.initiate();
     }
 
-    draw(img) {
+    draw() {
         for (var i = 0; i < this.monstersAmount; i++) {
-            context.drawImage(img, this.monsters[i].x, this.monsters[i].y, 60, 60);
+            context.drawImage(monsterImg, this.monsters[i].x, this.monsters[i].y, 60, 60);
         }
     }
 
@@ -37,6 +39,34 @@ class Monster {
         this.monsters[3].y = 540;
     }
 
+    move(shape, board) {
+        console.log("here");
+        for (var i = 0; i < this.monstersAmount; i++) {
+            let xMonster = this.monsters[i].x / 60;
+            let yMonster = this.monsters[i].y / 60;
+
+            //the monster below the pacman - same colum
+            if (xMonster == shape.i && yMonster > shape.j && yMonster > 0 && board[xMonster][yMonster - 1] != 4) {
+                this.monsters[i].y = this.monsters[i].y - 60;
+                context.drawImage(monsterImg, this.monsters[i].x, this.monsters[i].y, 60, 60);
+            }
+            //the monster above the pacman - same colum
+            else if (xMonster == shape.i && yMonster < shape.j && yMonster < 9 && board[xMonster][yMonster + 1] != 4) {
+                this.monsters[i].y = this.monsters[i].y + 60;
+                context.drawImage(monsterImg, this.monsters[i].x, this.monsters[i].y, 60, 60);
+            }
+            //the monster on the left of the pacman - same row
+            else if(yMonster == shape.j && xMonster > shape.i && xMonster > 0 && board[xMonster - 1][yMonster] != 4) {
+                this.monsters[i].x = this.monsters[i].x - 60;
+                context.drawImage(monsterImg, this.monsters[i].x, this.monsters[i].y, 60, 60);
+            }
+            //the monster on the right of the pacman - same row
+            else if(yMonster == shape.j && xMonster < shape.i && xMonster < 9 && board[xMonster + 1][yMonster] != 4) {
+                this.monsters[i].x = this.monsters[i].x + 60;
+                context.drawImage(monsterImg, this.monsters[i].x, this.monsters[i].y, 60, 60);
+            }
+        }
+    }
 
 }
 
