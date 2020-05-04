@@ -18,44 +18,46 @@ $(document).ready(function () {
 
 function Start() {
 	// board = new Array();
-	board = new Board(food_remain, monsterAmount, wallsAmount);
+	board = new Board(context, 50, 3, 20);
+	board.draw();
 	score = 0;
-	pac_color = "yellow";
-	var cnt = 100;
-	var food_remain = 50; //should be a var
-	var food_remain_5 = Math.floor(food_remain * 0.6);
-	var food_remain_15 = Math.floor(food_remain * 0.3);
-	var food_remain_25 = Math.floor(food_remain * 0.1);
-	food_remain = food_remain_5 + food_remain_15 + food_remain_25;
+	// pac_color = "yellow";
+	// var cnt = 100;
+	// var food_remain = 50; //should be a var
+	// var food_remain_5 = Math.floor(food_remain * 0.6);
+	// var food_remain_15 = Math.floor(food_remain * 0.3);
+	// var food_remain_25 = Math.floor(food_remain * 0.1);
+	// food_remain = food_remain_5 + food_remain_15 + food_remain_25;
 
-	var monsterAmount = 3; //should be a var
-	let wallsAmount = 100 - monsterAmount - food_remain;
-	var pacman_remain = 1;
-	start_time = new Date();
+	// var monsterAmount = 3; //should be a var
+	// let wallsAmount = 100 - monsterAmount - food_remain;
+	// var pacman_remain = 1;
+	// start_time = new Date();
 
-	for (var i = 0; i < 10; i++) {
-		board[i] = new Array();
-		for (var j = 0; j < 10; j++) {
-			board[i][j] = 0;
-		}
-	}
+	// for (var i = 0; i < 10; i++) {
+	// 	board[i] = new Array();
+	// 	for (var j = 0; j < 10; j++) {
+	// 		board[i][j] = 0;
+	// 	}
+	// }
 
-	keysDown = {};
-	addEventListener(
-		"keydown",
-		function (e) {
-			keysDown[e.keyCode] = true;
-		},
-		false
-	);
-	addEventListener(
-		"keyup",
-		function (e) {
-			keysDown[e.keyCode] = false;
-		},
-		false
-	);
-	interval = setInterval(UpdatePosition, 150);
+	// keysDown = {};
+	// addEventListener(
+	// 	"keydown",
+	// 	function (e) {
+	// 		keysDown[e.keyCode] = true;
+	// 	},
+	// 	false
+	// );
+	// addEventListener(
+	// 	"keyup",
+	// 	function (e) {
+	// 		keysDown[e.keyCode] = false;
+	// 	},
+	// 	false
+	// );
+	
+	// interval = setInterval(UpdatePosition, 150);
 }
 
 

@@ -1,18 +1,14 @@
 
 class Wall {
-    constructor(context, startPosition) {
+    constructor(context) {
         this.context = context;
-        this.position = {
-            x: startPosition[0],
-            y: startPosition[1]
-        };
     }
 
-    draw() {
-        context.beginPath();
-        context.rect(this.position.x - 30, this.position.y - 30, 60, 60);
-        context.fillStyle = "grey"; //color
-        context.fill();
+    draw(center) {
+        this.context.beginPath();
+        this.context.rect(center.x - 30, center.y - 30, 60, 60);
+        this.context.fillStyle = "grey"; //color
+        this.context.fill();
     }
 
     type() {

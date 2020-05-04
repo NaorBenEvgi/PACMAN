@@ -1,9 +1,10 @@
 
 class Food {
-    constructor(context, position, type, color) {
+    constructor(context, position, foodType, color, size) {
         this.context = context;
         this.color = color;
-        this.type = type;
+        this.size = size;
+        this.foodType = foodType;
         this.center = {
             x: position[0],
             y: position[1]
@@ -11,14 +12,14 @@ class Food {
     }
 
     type() {
-        return this.type
+        return this.foodType
     }
 
-    draw(size) {
-        context.beginPath();
-        context.arc(this.center.x, this.center.y, size, 0, 2 * Math.PI); // circle
-        context.fillStyle = this.color; //color
-        context.fill();
+    draw(center) {
+        this.context.beginPath();
+        this.context.arc(center.x, center.y, this.size, 0, 2 * Math.PI); // circle
+        this.context.fillStyle = this.color; //color
+        this.context.fill();
     }
 
 

@@ -1,6 +1,8 @@
 class Pacman {
-    constructor(context, startPositon) {
+    constructor(context, startPositon, direction) {
         this.context = context;
+        this.direction = direction;
+        this.color = 'yellow';
         this.center = {
             x: startPositon[0],
             y: startPositon[1]
@@ -13,9 +15,13 @@ class Pacman {
         }
     }
 
-    move(){}
+    move() { }
 
-    draw(direction) {
+    type() {
+        return "pacman";
+    }
+
+    draw(center) {
         const context = this.context;
         let start;
         let end;
@@ -23,13 +29,12 @@ class Pacman {
 
         // Body
         context.beginPath();
-        console.log(direction);
-        if (this.directions.left == direction) {
+        if (this.directions.left == this.direction) {
             start = Math.PI * 1.15;
             end = Math.PI * 0.85;
             eye = {
-                x: this.center.x - 5,
-                y: this.center.y - 15
+                x: center.x - 5,
+                y: center.y - 15
 
             }
         }
@@ -37,8 +42,8 @@ class Pacman {
             start = Math.PI * 0.15;
             end = Math.PI * 1.85;
             eye = {
-                x: this.center.x + 5,
-                y: this.center.y - 15
+                x: center.x + 5,
+                y: center.y - 15
 
             }
         }
@@ -46,8 +51,8 @@ class Pacman {
             start = Math.PI * 1.65;
             end = Math.PI * 1.35;
             eye = {
-                x: this.center.x - 15,
-                y: this.center.y - 5
+                x: center.x - 15,
+                y: center.y - 5
 
             }
         }
@@ -55,14 +60,14 @@ class Pacman {
             start = Math.PI * 0.65;
             end = Math.PI * 0.35;
             eye = {
-                x: this.center.x + 15,
-                y: this.center.y - 5
+                x: center.x + 15,
+                y: center.y - 5
 
             }
         }
-        context.arc(this.center.x, this.center.y, 30, start, end); // half circle
-        context.lineTo(this.center.x, this.center.y);
-        context.fillStyle = pac_color; //color
+        context.arc(center.x, center.y, 30, start, end); // half circle
+        context.lineTo(center.x, center.y);
+        context.fillStyle = this.color; //color
         context.fill();
 
         // Eye 
