@@ -141,8 +141,20 @@ class Board {
     }
 
 
-    isMonsterThere(i){
-        // check if monsters other then i in array there
+    isMonsterThere(x, y) {
+        for (var i = 0; i < this.numberOfMonsters; i++) {
+            if(this.monsters[i].position.x === x*60 && this.monsters[i].position.y === y*60){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    isWallThere(x, y) {
+        if(this.board[x][y].type() === 'wall'){
+            return true;
+        }
+        return false;
     }
 
 
@@ -152,50 +164,49 @@ class Board {
             let xMonster = this.monsters[i].position.x / 60;
             let yMonster = this.monsters[i].position.y / 60;
 
-            if(yMonster === this.pacmanPosition[1] && xMonster === this.pacmanPosition[0])
-            {
-                score =- 10; //lose
+            if (yMonster === this.pacmanPosition[1] && xMonster === this.pacmanPosition[0]) {
+                score = - 10; //lose
                 break;
             }
 
             // the monster in the same row
             else if (yMonster === this.pacmanPosition[1]) {
-                if (xMonster > this.pacmanPosition[0] && this.board[xMonster - 1][yMonster].type() != 'wall') { // monster on the right
+                if (xMonster > this.pacmanPosition[0] && !this.isWallThere(xMonster - 1, yMonster) && !this.isMonsterThere(xMonster - 1, yMonster)) { // monster on the right
                     this.monsters[i].position.x = this.monsters[i].position.x - 60;
-                } else if (xMonster < this.pacmanPosition[0] && this.board[xMonster + 1][yMonster].type() != 'wall') { // monster on the left
+                } else if (xMonster < this.pacmanPosition[0] && !this.isWallThere(xMonster + 1, yMonster) && !this.isMonsterThere(xMonster + 1, yMonster)) { // monster on the left
                     this.monsters[i].position.x = this.monsters[i].position.x + 60;
-                } else if (this.board[xMonster][yMonster + 1].type() != 'wall') { // wall!!
+                } else if (!this.isWallThere(xMonster, yMonster + 1) && !this.isMonsterThere(xMonster, yMonster + 1)) { // wall!!
                     this.monsters[i].position.y = this.monsters[i].position.y + 60;
-                } else if (this.board[xMonster][yMonster - 1].type() != 'wall') {
+                } else if (!this.isWallThere(xMonster, yMonster - 1) && !this.isMonsterThere(xMonster, yMonster - 1)) {
                     this.monsters[i].position.y = this.monsters[i].position.y - 60;
                 }
             }
             // the monster in the same col
             else if (xMonster === this.pacmanPosition[0]) {
-                if (yMonster > this.pacmanPosition[1] && this.board[xMonster][yMonster - 1].type() != 'wall') { // monster on the right
+                if (yMonster > this.pacmanPosition[1] && !this.isWallThere(xMonster, yMonster - 1) && !this.isMonsterThere(xMonster, yMonster - 1)) { // monster on the right
                     this.monsters[i].position.y = this.monsters[i].position.y - 60;
-                } else if (yMonster < this.pacmanPosition[1] && this.board[xMonster][yMonster + 1].type() != 'wall') {
+                } else if (yMonster < this.pacmanPosition[1] && !this.isWallThere(xMonster, yMonster + 1) && !this.isMonsterThere(xMonster, yMonster + 1)) {
                     this.monsters[i].position.y = this.monsters[i].position.y + 60;
-                } else if (this.board[xMonster + 1][yMonster].type() != 'wall') { // wall!!
+                } else if (!this.isWallThere(xMonster + 1, yMonster) && !this.isMonsterThere(xMonster + 1, yMonster)) { // wall!!
                     this.monsters[i].position.x = this.monsters[i].position.x + 60;
-                } else if (this.board[xMonster - 1][yMonster].type() != 'wall') {
+                } else if (!this.isWallThere(xMonster - 1, yMonster) && !this.isMonsterThere(xMonster - 1, yMonster)) {
                     this.monsters[i].position.x = this.monsters[i].position.x - 60;
                 }
             }
             //the monster below the pacman 
-            else if (yMonster > this.pacmanPosition[1] && yMonster > 0 && this.board[xMonster][yMonster - 1].type() != 'wall') {
+            else if (yMonster > this.pacmanPosition[1] && yMonster > 0 && !this.isWallThere(xMonster, yMonster - 1) && !this.isMonsterThere(xMonster, yMonster - 1)) {
                 this.monsters[i].position.y = this.monsters[i].position.y - 60;
             }
             //the monster above the pacman 
-            else if (yMonster < this.pacmanPosition[1] && yMonster < 9 && this.board[xMonster][yMonster + 1].type() != 'wall') {
+            else if (yMonster < this.pacmanPosition[1] && yMonster < 9 && !this.isWallThere(xMonster, yMonster + 1) && !this.isMonsterThere(xMonster, yMonster + 1)) {
                 this.monsters[i].position.y = this.monsters[i].position.y + 60;
             }
             //the monster on the left of the pacman 
-            else if (xMonster > this.pacmanPosition[0] && xMonster > 0 && this.board[xMonster - 1][yMonster].type() != 'wall') {
+            else if (xMonster > this.pacmanPosition[0] && xMonster > 0 && !this.isWallThere(xMonster - 1, yMonster) && !this.isMonsterThere(xMonster - 1, yMonster)) {
                 this.monsters[i].position.x = this.monsters[i].position.x - 60;
             }
             //the monster on the right of the pacman 
-            else if (xMonster < this.pacmanPosition[0] && xMonster < 9 && this.board[xMonster + 1][yMonster].type() != 'wall') {
+            else if (xMonster < this.pacmanPosition[0] && xMonster < 9 && !this.isWallThere(xMonster + 1, yMonster) && !this.isMonsterThere(xMonster + 1, yMonster)) {
                 this.monsters[i].position.x = this.monsters[i].position.x + 60;
             }
         }
