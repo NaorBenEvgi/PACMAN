@@ -1,12 +1,8 @@
 class Pacman {
-    constructor(context, startPositon, direction) {
+    constructor(context, direction) {
         this.context = context;
         this.direction = direction;
         this.color = 'yellow';
-        this.center = {
-            x: startPositon[0],
-            y: startPositon[1]
-        };
         this.directions = {
             "up": 1,
             "down": 2,
@@ -38,7 +34,7 @@ class Pacman {
 
             }
         }
-        else if (this.directions.right == direction) {
+        else if (this.directions.right == this.direction) {
             start = Math.PI * 0.15;
             end = Math.PI * 1.85;
             eye = {
@@ -47,7 +43,7 @@ class Pacman {
 
             }
         }
-        else if (this.directions.up == direction) {
+        else if (this.directions.up == this.direction) {
             start = Math.PI * 1.65;
             end = Math.PI * 1.35;
             eye = {
