@@ -4,11 +4,14 @@ class Food {
         this.context = context;
     }
 
-    draw(center, color) {
+    draw(center, size, color) {
         context.beginPath();
-        context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
+        context.arc(center.x, center.y, size, 0, 2 * Math.PI); // circle
         context.fillStyle = color; //color
         context.fill();
     }
+
+
+
 }
 
