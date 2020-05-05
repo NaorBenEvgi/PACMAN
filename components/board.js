@@ -14,6 +14,8 @@ class Board {
         this.numberOfMonsters = numberOfMonsters;
         this.initMonsters();
         this.food = [];
+        this.extraLife = true;
+        this.extraTime = true;
     }
 
     initBoard(size) {
@@ -87,7 +89,7 @@ class Board {
         while (this.foodRemain > 0) {
             let emptyCell = this.findRandomEmptyCell();
             if (foodRemain5 > 0) {
-                this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'small', smallFoodColor, 5); //TODO: Change food color
+                this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'small', smallFoodColor, 5); 
                 foodRemain5--;
                 this.foodRemain--;
                 continue;
@@ -105,6 +107,12 @@ class Board {
                 continue;
             }
         }
+
+        let emptyCell = this.findRandomEmptyCell();
+        this.board[emptyCell[0]][emptyCell[1]] = new ExtraFood(this.context, emptyCell, 'time'); 
+        emptyCell = this.findRandomEmptyCell();
+        this.board[emptyCell[0]][emptyCell[1]] = new ExtraFood(this.context, emptyCell, 'life'); 
+
     }
 
     clearBoard() {
@@ -128,7 +136,7 @@ class Board {
         let score = this.calculateScore();
         if(score === -10)
         {
-            return score;
+            return {score: score, bonus: ''};
         }
         // clear pacmen
         this.board[this.pacmanPosition[0]][this.pacmanPosition[1]] = new EmptyCell();
@@ -155,8 +163,9 @@ class Board {
         }
 
         score = this.calculateScore();
+        let bonus = this.calculateBonus();
         this.board[this.pacmanPosition[0]][this.pacmanPosition[1]] = new Pacman(this.context, key);
-        return score;
+        return {score: score, bonus: bonus};
     }
 
 
@@ -179,18 +188,12 @@ class Board {
 
     
     updateMonstersPosition() {
-        let score = 0;
         for (var i = 0; i < this.numberOfMonsters; i++) {
             let xMonster = this.monsters[i].position.x / 60;
             let yMonster = this.monsters[i].position.y / 60;
 
-            if (yMonster === this.pacmanPosition[1] && xMonster === this.pacmanPosition[0]) {
-                score = - 10; //lose
-                break;
-            }
-
             // the monster in the same row
-            else if (yMonster === this.pacmanPosition[1]) {
+            if (yMonster === this.pacmanPosition[1]) {
                 if (xMonster > this.pacmanPosition[0] && !this.isWallThere(xMonster - 1, yMonster) && !this.isMonsterThere(xMonster - 1, yMonster)) { // monster on the right
                     this.monsters[i].position.x = this.monsters[i].position.x - 60;
                 } else if (xMonster < this.pacmanPosition[0] && !this.isWallThere(xMonster + 1, yMonster) && !this.isMonsterThere(xMonster + 1, yMonster)) { // monster on the left
@@ -230,7 +233,6 @@ class Board {
                 this.monsters[i].position.x = this.monsters[i].position.x + 60;
             }
         }
-        return score;
     }
 
 
@@ -240,8 +242,18 @@ class Board {
         }
         if (this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'small' || this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'medium' || this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'large') {
             this.foodRemain--;
+            console.log("here?");
             return this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].size
         }
         return 0;
+    }
+
+    calculateBonus(){
+        if (this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'life'){
+            return 'life';
+        }
+        if (this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'time'){
+            return 'time';
+        }
     }
 }

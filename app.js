@@ -24,6 +24,12 @@ var backgroundMusic;
 
 var monsterImg = new Image();
 monsterImg.src = 'resources/monster.png'
+var lifeImg = new Image();
+lifeImg.src = 'resources/life-without-background.png'
+var timeImg = new Image();
+timeImg.src = 'resources/time-without-background.png'
+var bonusImg = new Image();
+bonusImg.src = 'resources/bonus-removebg-preview.png'
 
 const mapButtonToDiv = {
 	'#homeMenu': '#welcomeDiv',
@@ -50,8 +56,8 @@ $(document).ready(function () {
 
 
 function Start() {
-
-	wallsAmount = 100 - food_remain - 1;
+	$("#username").text("Hello " + username + "!");
+	wallsAmount = 100 - food_remain - 1 -3; //3 for the extra food and 1 for the pacman itself
 	backgroundMusic = new Audio("resources/sounds/Pac-man_theme_remix.mp3");
 	backgroundMusic.play();
 	board = new Board(context, food_remain, monsterAmount, wallsAmount, smallFoodColor, mediumFoodColor, largeFoodColor);
@@ -78,12 +84,7 @@ function Start() {
 }
 
 function updateMonstersPosition() {
-	const addScore = board.updateMonstersPosition();
-	console.log(addScore);
-	if (addScore === -10) {
-		this.pacmanWasEaten();
-	}
-	score += addScore;
+	board.updateMonstersPosition();
 }
 
 function pacmanWasEaten() {
@@ -150,12 +151,21 @@ function Draw() {
 function UpdatePosition() {
 	var x = GetKeyPressed();
 	let addScore = 0;
+	let addBonus = '';
 	if (x) {
-		addScore = board.updatePacmanPosition(x);
+		let res = board.updatePacmanPosition(x);
+		addScore = res.score;
+		addBonus = res.bonus;
 	}
 	this.score += addScore;
 	if (addScore === -10) {
 		return this.pacmanWasEaten();
+	}
+	if(addBonus === 'time'){
+		gameTime += 20;
+	}
+	if(addBonus === 'life'){
+		lifes += 1;
 	}
 	var currentTime = new Date();
 	time_elapsed = Math.floor((currentTime - start_time) / 1000);
@@ -172,7 +182,7 @@ function UpdatePosition() {
 /****************** jQuery ******************/
 //DB for users
 let DataBase = [];
-DataBase.push({ user: 'a', password: 'a' });
+DataBase.push({ user: 'p', password: 'p' });
 /*
 $(function () {
 	$('.content').hide();
@@ -218,7 +228,7 @@ $('#loginButton').on('click', function (event) {
 	var inputUsername = loginAttributes[0].value;
 	var inputPassword = loginAttributes[1].value;
 	let checkUser = DataBase.find(o => o.user === inputUsername);
-	if (checkUser != -1 && checkUser.password == inputPassword) {
+	if (checkUser && checkUser.password == inputPassword) {
 		username = inputUsername;
 		$('#loginDiv').hide();
 		$('#gameSettingsDiv').show();
