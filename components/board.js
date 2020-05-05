@@ -61,9 +61,19 @@ class Board {
     }
 
     putPacman() {
-        const emptyCell = this.findRandomEmptyCell();
+        let emptyCell = this.findRandomEmptyCell();
+        while(this.isCorner(emptyCell)){
+            emptyCell = this.findRandomEmptyCell();
+        }
         this.board[emptyCell[0]][emptyCell[1]] = new Pacman(this.context, 4);
         this.pacmanPosition = emptyCell;
+    }
+
+    isCorner(cell){
+        if((cell[0] == 0 && cell[1] == 0) || (cell[0] == 0 && cell[1] == 9) || (cell[0] == 9 && cell[1] == 9) || (cell[0] == 9 && cell[1] == 0)){
+            return true;
+        }
+        return false;
     }
 
     spreadingFood(numberOfFood) {
