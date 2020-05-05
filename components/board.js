@@ -2,17 +2,17 @@
 
 class Board {
 
-    constructor(context, numberOfFood, numberOfMonsters, numberOfWalls) {
+    constructor(context, numberOfFood, numberOfMonsters, numberOfWalls, smallFoodColor, mediumFoodColor, largeFoodColor) {
         this.size = 10;
         this.board = this.initBoard(this.size);
         this.context = context;
         this.foodRemain;
         this.initWalls(numberOfWalls);
         this.putPacman();
-        this.spreadingFood(numberOfFood);
+        this.spreadingFood(numberOfFood, smallFoodColor, mediumFoodColor, largeFoodColor);
         this.pacmanPosition;
         this.numberOfMonsters = numberOfMonsters;
-        this.monsters = this.initMonsters();
+        this.initMonsters();
         this.food = [];
     }
 
@@ -30,7 +30,7 @@ class Board {
 
     initMonsters() {
         //first monster
-        return [
+        this.monsters = [
             new Monster(this.context, { x: 0, y: 0 }),
             new Monster(this.context, { x: 540, y: 0 }),
             new Monster(this.context, { x: 0, y: 540 }),
@@ -39,7 +39,7 @@ class Board {
     }
 
     initWalls(numberOfWalls) {
-
+        console.log(numberOfWalls);
         //creating walls
         const indexWallA = [1, 8, 1, 8, 3, 6, 3, 6, 4, 5, 4, 5, 4, 5, 0, 9, 0, 9, 2, 7, 2, 7, 1, 8, 1, 8];
         const indexWallB = [1, 1, 8, 8, 5, 5, 6, 6, 6, 6, 2, 2, 3, 3, 4, 4, 5, 5, 1, 1, 8, 8, 2, 2, 7, 7];
@@ -61,6 +61,9 @@ class Board {
     }
 
     putPacman() {
+        if(this.pacmanPosition){
+            this.board[this.pacmanPosition[0]][this.pacmanPosition[1]] = new EmptyCell();
+        }
         let emptyCell = this.findRandomEmptyCell();
         while(this.isCorner(emptyCell)){
             emptyCell = this.findRandomEmptyCell();
@@ -76,7 +79,7 @@ class Board {
         return false;
     }
 
-    spreadingFood(numberOfFood) {
+    spreadingFood(numberOfFood, smallFoodColor, mediumFoodColor, largeFoodColor) {
         let foodRemain5 = Math.floor(numberOfFood * 0.6);
         let foodRemain15 = Math.floor(numberOfFood * 0.3);
         let foodRemain25 = Math.floor(numberOfFood * 0.1);
@@ -84,19 +87,19 @@ class Board {
         while (this.foodRemain > 0) {
             let emptyCell = this.findRandomEmptyCell();
             if (foodRemain5 > 0) {
-                this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'small', 'black', 5); //TODO: Change food color
+                this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'small', smallFoodColor, 5); //TODO: Change food color
                 foodRemain5--;
                 this.foodRemain--;
                 continue;
             }
             if (foodRemain15 > 0) {
-                this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'medium', 'blue', 10);
+                this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'medium', mediumFoodColor, 10);
                 foodRemain15--;
                 this.foodRemain--;
                 continue;
             }
             if (foodRemain25 > 0) {
-                this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'large', 'red', 15);
+                this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'large', largeFoodColor, 15);
                 foodRemain25--;
                 this.foodRemain--;
                 continue;
@@ -109,7 +112,8 @@ class Board {
     }
 
     draw() {
-        this.clearBoard();
+        //this.clearBoard();
+        canvas.width=canvas.width;
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
                 this.board[i][j].draw({ x: i * 60 + 30, y: j * 60 + 30 });
@@ -121,6 +125,11 @@ class Board {
     }
 
     updatePacmanPosition(key) {
+        let score = this.calculateScore();
+        if(score === -10)
+        {
+            return score;
+        }
         // clear pacmen
         this.board[this.pacmanPosition[0]][this.pacmanPosition[1]] = new EmptyCell();
         // re position pacman
@@ -145,7 +154,7 @@ class Board {
             }
         }
 
-        const score = this.calculateScore();
+        score = this.calculateScore();
         this.board[this.pacmanPosition[0]][this.pacmanPosition[1]] = new Pacman(this.context, key);
         return score;
     }
@@ -168,6 +177,7 @@ class Board {
     }
 
 
+    
     updateMonstersPosition() {
         let score = 0;
         for (var i = 0; i < this.numberOfMonsters; i++) {
@@ -225,6 +235,9 @@ class Board {
 
 
     calculateScore() {
+        if(this.isMonsterThere(this.pacmanPosition[0], this.pacmanPosition[1])){
+            return -10;
+        }
         if (this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'small' || this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'medium' || this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'large') {
             this.foodRemain--;
             return this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].size
