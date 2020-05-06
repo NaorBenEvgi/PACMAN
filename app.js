@@ -84,7 +84,12 @@ function Start() {
 }
 
 function updateMonstersPosition() {
-	board.updateMonstersPosition();
+	const addScore = board.updateMonstersPosition();
+	console.log(addScore);
+	if (addScore === -10) {
+		this.pacmanWasEaten();
+	}
+	score += addScore;
 }
 
 function pacmanWasEaten() {
@@ -99,10 +104,10 @@ function pacmanWasEaten() {
 	}, 10);
 	setTimeout(function () { backgroundMusic.play(); }, 1700);
 	if (lifes === 0) {
-		var lostMusic = new sound("resources/sounds/Booing-sound-effect.mp3");
+		const lostMusic = new Audio("resources/sounds/Booing-sound-effect.mp3");
 		setTimeout(function () { lostMusic.play(); }, 10);
 		setTimeout(function () { backgroundMusic.pause(); }, 1700);
-		//end game
+		setTimeout(endGameWindow("Loser! your score is " + score), 100);
 	} else {
 		setTimeout(function () {
 			board.putPacman();
@@ -113,6 +118,7 @@ function pacmanWasEaten() {
 	}
 
 }
+
 
 function GetKeyPressed() {
 	// up
@@ -154,6 +160,7 @@ function UpdatePosition() {
 	let addBonus = '';
 	if (x) {
 		let res = board.updatePacmanPosition(x);
+		console.log(res);
 		addScore = res.score;
 		addBonus = res.bonus;
 	}
@@ -173,9 +180,56 @@ function UpdatePosition() {
 		pac_color = "green";
 	}
 	Draw();
-	if (score == 500) { //should delete
-		window.clearInterval(interval);
-		window.alert("Game completed");
+	this.checkIfGameEnd();
+}
+
+function endGameWindow(inputMessage){
+	window.clearInterval(interval);
+	window.clearInterval(monsterInterval);
+	lifes = 5;
+	backgroundMusic.pause();
+	bootbox.confirm({
+		title: inputMessage,
+		message: "Would you like to start a new game?",
+		buttons: {
+			cancel: {
+				label: '<i class="fa fa-times"></i> No thanks'
+			},
+			confirm: {
+				label: '<i class="fa fa-check"></i> Yes!!!'
+			}
+		},
+		callback: function (result) {
+			console.log('This was logged in the callback: ' + result + '.');
+			$("#gameDiv").hide();
+			if(result) {
+			  $("#gameSettingsDiv").show(1000);
+			}
+			else{
+			  $("#welcomeDiv").show(1000);
+			}
+		}
+	});
+}
+
+function checkIfGameEnd(){
+	const WinMusic = new Audio("resources/sounds/Ta_Da.mp3.mp3");
+
+	if(this.food_remain === 0){
+		setTimeout(endGameWindow("You are Winner!!! your score is " + score + "."), 200);
+		WinMusic.play();
+	}
+
+	if(this.lblTime.value <= '0'){
+		console.log(gameTime);
+		if(score <= 100){
+			setTimeout(endGameWindow("Time's up! You are better than " +score+ " points!"), 200);
+			const lostMusic = new Audio("resources/sounds/Booing-sound-effect.mp3");
+			setTimeout(function () { lostMusic.play(); }, 10);
+		}else{
+			setTimeout(endGame("Time's up! You are Winner!!! your score is " + score), 200);
+			WinMusic.play();
+		}
 	}
 }
 
@@ -225,7 +279,7 @@ $('#loginButton').on('click', function (event) {
 	event.preventDefault();
 	event.stopPropagation();
 	var loginAttributes = document.getElementsByClassName("loginForm");
-	var inputUsername = loginAttributes[0].value;
+	var inputUsername = loginAttributes[0].value; 
 	var inputPassword = loginAttributes[1].value;
 	let checkUser = DataBase.find(o => o.user === inputUsername);
 	if (checkUser && checkUser.password == inputPassword) {
@@ -254,5 +308,13 @@ $('#startGameButton').on('click', function (event) {
 	$('#gameSettingsDiv').hide();
 	$('#gameDiv').show();
 	Start();
+});
 
+
+$('#aboutMenu').on('click', function(event) {
+	bootbox.alert({
+		message: "This PacMan game was developed by Naor Ben Evgi & Roy Judes, B.Sc Third Year Software and Information System Engineering Student in Ben Gurion University of the Negev" +
+		"<br/><br/>" + "<strong>The most difficult part was to make the monster chase after the Pacman icon.</strong>",
+		backdrop: true
+	});
 });
