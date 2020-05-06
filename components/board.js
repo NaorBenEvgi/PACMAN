@@ -1,4 +1,5 @@
 
+const eatMusic = new Audio("resources/sounds/pacman_eatfruit.wav");
 
 class Board {
 
@@ -258,7 +259,7 @@ class Board {
     }
 
     updateBonusPosition() {
-        if(!this.extraScore){
+        if (!this.extraScore) {
             return 0;
         }
 
@@ -266,10 +267,13 @@ class Board {
         let xBonus = this.bonus.position.x / 60;
         let yBonus = this.bonus.position.y / 60;
 
-        
+
         if (yBonus === this.pacmanPosition[1] && xBonus === this.pacmanPosition[0]) {
             this.extraScore = false;
-            return 1000;
+            const eatMusic = new Audio("resources/sounds/pacman_eatfruit.wav");
+            console.log("music1");
+            eatMusic.play();
+            return 50;
         }
         if (random < 0.25) {
             if (xBonus < 9 && !this.isWallThere(xBonus + 1, yBonus)) {
@@ -308,12 +312,12 @@ class Board {
             return -10;
         }
         if (this.extraScore && this.isBonusThere(this.pacmanPosition[0], this.pacmanPosition[1])) {
+            eatMusic.play();
             this.extraScore = false;
-            return 1000;
+            return 50;
         }
         if (this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'small' || this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'medium' || this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'large') {
             this.foodRemain--;
-            console.log("here?");
             return this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].size
         }
         return 0;
@@ -321,9 +325,11 @@ class Board {
 
     calculateBonus() {
         if (this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'life') {
+            eatMusic.play();
             return 'life';
         }
         if (this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'time') {
+            eatMusic.play();
             return 'time';
         }
     }
