@@ -7,6 +7,7 @@ var start_time;
 var time_elapsed;
 var interval;
 var monsterInterval;
+var bonusInterval;
 var direction = 4;
 var lifes = 5;
 var monsterAmount; //should be a var
@@ -81,14 +82,19 @@ function Start() {
 	);
 	interval = setInterval(UpdatePosition, 150);
 	monsterInterval = setInterval(updateMonstersPosition, 650);
+	bonusInterval = setInterval(updateBonusPosition, 650);
 }
 
 function updateMonstersPosition() {
 	const addScore = board.updateMonstersPosition();
-	console.log(addScore);
 	if (addScore === -10) {
 		this.pacmanWasEaten();
 	}
+	score += addScore;
+}
+
+function updateBonusPosition() {
+	const addScore = board.updateBonusPosition();
 	score += addScore;
 }
 
@@ -213,7 +219,7 @@ function endGameWindow(inputMessage){
 }
 
 function checkIfGameEnd(){
-	const WinMusic = new Audio("resources/sounds/Ta_Da.mp3.mp3");
+	const WinMusic = new Audio("resources/sounds/Ta_Da.mp3");
 
 	if(this.food_remain === 0){
 		setTimeout(endGameWindow("You are Winner!!! your score is " + score + "."), 200);

@@ -20,11 +20,7 @@ class ExtraFood {
         if (this.extraFoodType === 'life') {
             this.context.drawImage(lifeImg, this.center.x * 60, this.center.y * 60, 60, 60);
         }
-        if (this.extraFoodType === 'bonus') {
-            this.context.drawImage(bonusImg, this.center.x * 60, this.center.y * 60, 60, 60);
-        }
     }
-
 
 
 }
