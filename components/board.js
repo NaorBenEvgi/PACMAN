@@ -91,25 +91,26 @@ class Board {
         let foodRemain5 = Math.floor(numberOfFood * 0.6);
         let foodRemain15 = Math.floor(numberOfFood * 0.3);
         let foodRemain25 = Math.floor(numberOfFood * 0.1);
-        this.foodRemain = foodRemain5 + foodRemain15 + foodRemain25;
-        while (this.foodRemain > 0) {
+        let totalFood = foodRemain5 + foodRemain15 + foodRemain25;
+        this.foodRemain = totalFood;
+        while (totalFood > 0) {
             let emptyCell = this.findRandomEmptyCell();
             if (foodRemain5 > 0) {
                 this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'small', smallFoodColor, 5);
                 foodRemain5--;
-                this.foodRemain--;
+                totalFood--;
                 continue;
             }
             if (foodRemain15 > 0) {
                 this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'medium', mediumFoodColor, 10);
                 foodRemain15--;
-                this.foodRemain--;
+                totalFood--;
                 continue;
             }
             if (foodRemain25 > 0) {
                 this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'large', largeFoodColor, 15);
                 foodRemain25--;
-                this.foodRemain--;
+                totalFood--;
                 continue;
             }
         }

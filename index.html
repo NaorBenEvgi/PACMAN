@@ -109,7 +109,7 @@
 				</tr>
 				<tr>
 					<td>
-						5 worth points colour
+						5 worth points color
 					</td>
 					<td>
 						<div class="form-group settings">
@@ -119,7 +119,7 @@
 				</tr>
 				<tr>
 					<td>
-						15 worth points colour
+						15 worth points color
 					</td>
 					<td>
 						<div class="form-group settings">
@@ -129,7 +129,7 @@
 				</tr>
 				<tr>
 					<td>
-						25 worth points colour
+						25 worth points color
 					</td>
 					<td>
 						<div class="form-group settings">
@@ -139,7 +139,7 @@
 				</tr>
 				<tr>
 					<td>
-						Time to play (in seconds)
+						Time for game (seconds)
 					</td>
 					<td>
 						<div class="form-group settings">
@@ -160,6 +160,39 @@
 								<option value="3">3 Monsters</option>
 								<option value="4">4 Monsters</option>
 							</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Set arrows keys
+					</td>
+					<td>
+						<div class="form-group settings">
+							<a class="gameKeys" id="key-up" onclick="setUpKey()">UP</a>
+							<dialog class="setKeys" id="upWindow">
+								<p>please press a key</p>
+								<span class="dialogKeys" id="up"></span>
+								<a id="upOk">Ok</a>
+							</dialog>
+							<a class="gameKeys" id="key-down" onclick="setDownKey()">DOWN</a>
+							<dialog class="setKeys" id="downWindow">
+								<p>please press a key</p>
+								<span class="dialogKeys" id="down"></span>
+								<a id="downOk">Ok</a>
+							</dialog>
+							<a class="gameKeys" id="key-right" onclick="setRightKey()">RIGHT</a>
+							<dialog class="setKeys" id="rightWindow">
+								<p>please press a key</p>
+								<span class="dialogKeys" id="right"></span>
+								<a id="rightOk">Ok</a>
+							</dialog>
+							<a class="gameKeys" id="key-left" onclick="setLeftKey()">LEFT</a>
+							<dialog class="setKeys" id="leftWindow">
+								<p>please press a key</p>
+								<span class="dialogKeys" id="left"></span>
+								<a id="leftOk">Ok</a>
+							</dialog>
 						</div>
 					</td>
 				</tr>
