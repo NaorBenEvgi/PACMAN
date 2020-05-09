@@ -1,0 +1,344 @@
+html, body {margin: 0; height: 100%; overflow: hidden}
+
+
+body {
+    background-image: url('./resources/bg.jpg');
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+header {
+    background-color: white;
+    height: 50px;
+    opacity: 0.8;
+    display: flex;
+    flex-flow: row;
+    text-align: center;
+}
+
+.logo {
+    width: 110px;
+    height: 40px;
+    left: 70px;
+    position: absolute;
+    display: inline;
+    background-image: url("./resources/logo.png");
+    background-size: 100%;
+}
+
+.menu-link {
+    width: 100px;
+    display: inline-block;
+    margin: 10px;
+    font-weight: bold;
+    text-align: center;
+    color: #000000;
+}
+
+main {
+    margin: 50px auto 0 auto;
+    width: 60%;
+    height: 80%;
+}
+
+.welcome-btn {
+    background-color: #fcce0e;
+    font-weight: bold;
+    margin: 10px auto;
+    padding: 2%;
+    text-align: center;
+    border-radius: 100px;
+    display: inline-block;
+    width: 40%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-color: #333333;
+    border-style: solid;
+    border-width: thin;
+}
+
+#welcomeDiv {
+    display: flex;
+    position: relative;
+    flex-flow: column;
+    bottom: 5%;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+}
+
+.content-bg {
+    border-radius: 20px;
+    border-color: #333333;
+    border-style: solid;
+    border-width: medium;
+    margin: 50px auto 0 auto;
+    background-color: rgba(255, 255, 255, 0.7);
+    background-size: 100%;
+    width: 100%;
+    height: 100%;
+    background-repeat: round;
+}
+
+#canvas {
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+}
+
+#loginForm {
+    display: flex;
+    flex-flow: column;
+    margin: 11% auto;
+    width: 20%;
+}
+
+form {
+    display: flex;
+    flex-flow: column;
+    margin: 2% auto;
+    width: 20%;
+}
+
+#registerForm {
+    display: flex;
+    width: 80%;
+    flex-flow: column;
+    margin: 0;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
+.register-input-container {
+    height: 40px;
+    margin-top: 10px;}
+
+
+.register-input {
+    width: 100%;
+    height: 100%;
+    border-radius: 50px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+input[type=reset] {
+    width: 100%;
+    background-color: #f40890;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: #31d6f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#register-btns {
+    margin-top: 20px;
+}
+
+.register-btn {
+    width: 100%;
+    background-color: #f40890;
+    color: white;
+    margin: 8px 0;
+    height: 100%;
+    border-radius: 50px;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.blue {
+    background-color: #31d6f6;
+}
+
+.title {
+    display: block;
+    text-align: center;
+    font-size: 56pt;
+    font-weight: bolder;
+    color: #fcce0e;
+    text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black; 
+}
+
+.small-title {
+    font-size: 35pt;
+}
+
+#username {
+    display: block;
+    font-size: 26pt;
+    font-weight: bolder;
+    color: #333333;
+    margin-left: 40px;
+}
+
+#gameLabels {
+    display: flex;
+    flex-flow: row;
+    width: 90%;
+    margin: 10px auto;
+    justify-content: space-between;
+}
+
+.btn-container {
+    margin-top: 50%;
+    position: relative;
+    bottom: 0px;
+    display: flex;
+    top: auto;
+    flex-flow: column wrap;
+}
+
+#newGame {
+    background-color: #f40890;
+    color: white;
+    margin: 8px auto;
+    border-radius: 50px;
+    padding: 12px 20px;
+    width: 300px;
+    display: block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.game-label {
+    width: 150px;
+}
+
+
+.login-input {
+    margin-top: 10px;
+}
+
+#loginButton {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    border-radius: 40px;
+    margin-top: 10px;
+    color: white;
+    font-weight: bolder;
+    background-color: #f40890;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-color: #333333;
+    border-style: solid;
+    border-width: thin;
+}
+
+input {
+    width: 100%;
+}
+
+span {
+    display: block;
+}
+
+
+.hide {
+    display: none;
+}
+
+#startGameButton {
+    width: 100%;
+    background-color: #31d6f6;
+    color: white;
+    font-weight: bolder;
+    font-size: 24pt;
+    padding: 2% 20%;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#startRandomGameButton {
+    width: 100%;
+    background-color: #31d6f6;
+    color: white;
+    font-weight: bolder;
+    font-size: 24pt;
+    padding: 2% 20%;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.row-setting {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.setting-row-title {
+    font-weight: bolder;
+    font-size: 17pt;
+}
+
+.color-input {
+    width: 130px;
+}
+
+.footer {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    flex-direction: row;
+    position: absolute;
+    bottom: 0;
+    height: 28px;
+    width: 100%;
+    background-color: white;
+    opacity: 0.9;
+}
+
+.setting-table{
+    width: 50%;
+}
+
+.footer-text {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+}
+
+.container {
+    display: flex;
+    flex-flow: row;
+}
+
+.box {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    border: 2px solid;
+  }
+
+  #container{
+    display: flex;
+    width: 16%;
+  }
+
+  /* #first_name-error {
+    display: block;
+    margin-top: -4%;
+} */

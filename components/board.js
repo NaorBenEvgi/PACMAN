@@ -92,28 +92,36 @@ class Board {
         let foodRemain15 = Math.floor(numberOfFood * 0.3);
         let foodRemain25 = Math.floor(numberOfFood * 0.1);
         let totalFood = foodRemain5 + foodRemain15 + foodRemain25;
-        this.foodRemain = totalFood;
+        this.foodRemain = 0;
         while (totalFood > 0) {
             let emptyCell = this.findRandomEmptyCell();
             if (foodRemain5 > 0) {
                 this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'small', smallFoodColor, 5);
                 foodRemain5--;
                 totalFood--;
+                this.foodRemain++;
                 continue;
             }
             if (foodRemain15 > 0) {
                 this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'medium', mediumFoodColor, 10);
                 foodRemain15--;
                 totalFood--;
+                this.foodRemain++;
                 continue;
             }
             if (foodRemain25 > 0) {
                 this.board[emptyCell[0]][emptyCell[1]] = new Food(this.context, emptyCell, 'large', largeFoodColor, 15);
                 foodRemain25--;
                 totalFood--;
+                this.foodRemain++;
                 continue;
             }
         }
+        console.log(this.foodRemain);
+        console.log(totalFood);
+        console.log(foodRemain5);
+        console.log(foodRemain15);
+        console.log(foodRemain25);
 
         let emptyCell = this.findRandomEmptyCell();
         this.board[emptyCell[0]][emptyCell[1]] = new ExtraFood(this.context, emptyCell, 'time');
@@ -211,7 +219,7 @@ class Board {
 
 
             if (yMonster === this.pacmanPosition[1] && xMonster === this.pacmanPosition[0]) {
-                score = - 10; //lose
+                score = this.calculateScore(); //lose
                 break;
             }
 
@@ -309,19 +317,20 @@ class Board {
 
 
     calculateScore() {
+        let score = 0;
         if (this.isMonsterThere(this.pacmanPosition[0], this.pacmanPosition[1])) {
-            return -10;
+            score += -10;
         }
         if (this.extraScore && this.isBonusThere(this.pacmanPosition[0], this.pacmanPosition[1])) {
             eatMusic.play();
             this.extraScore = false;
-            return 50;
+            score += 50;
         }
         if (this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'small' || this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'medium' || this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].type() == 'large') {
             this.foodRemain--;
-            return this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].size
+            score += this.board[this.pacmanPosition[0]][this.pacmanPosition[1]].size
         }
-        return 0;
+        return score;
     }
 
     calculateBonus() {

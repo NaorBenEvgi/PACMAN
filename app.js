@@ -13,9 +13,9 @@ var lifes = 5;
 var monsterAmount; //should be a var
 let food_remain; //should be a var
 var wallsAmount;
-let smallFoodColor = 'red';
-let mediumFoodColor = 'blue';
-let largeFoodColor = 'black';
+let smallFoodColor;
+let mediumFoodColor;
+let largeFoodColor;
 var gameTime;
 var username;
 var lblScore = document.getElementById("lblScore");
@@ -27,6 +27,7 @@ var down = 40;
 var left = 37;
 var right = 39;
 var GAME_TIME;
+var DataBase =[];
 
 var monsterImg = new Image();
 monsterImg.src = 'resources/monster.png'
@@ -39,8 +40,10 @@ bonusImg.src = 'resources/bonus-removebg-preview.png'
 
 $(document).ready(function () {
 	context = canvas.getContext("2d");
-	 $('.content').hide();
-	 $('#welcomeDiv').show();
+	$('.content').hide();
+	$('#welcomeDiv').show();
+	//DB for users
+	DataBase.push({ user: 'p', password: 'p' });
 	/*
 	$('#loginButton').click(function () {
 		console.log('login pressed');
@@ -52,6 +55,28 @@ $(document).ready(function () {
 
 function Start() {
 	$("#username").text("Hello " + username + "!");
+	
+	// colors panel
+	var container = document.getElementById('container');
+    var colorList = {"5 points": smallFoodColor, "15 points": mediumFoodColor, "25 points": largeFoodColor};
+    $("#container").empty();
+    for (var key in colorList) {
+	  var boxContainer = document.createElement("DIV");
+	
+      var box = document.createElement("DIV");
+      var label = document.createElement("SPAN");
+
+      label.innerHTML = key;
+      box.className = "box";
+      box.style.backgroundColor = colorList[key];
+	 boxContainer.style.width = "150%"
+      boxContainer.appendChild(box);
+      boxContainer.appendChild(label);
+
+      container.appendChild(boxContainer);
+	}
+	
+
 	wallsAmount = 100 - food_remain - 1 - 3; //3 for the extra food and 1 for the pacman itself
 	backgroundMusic = new Audio("resources/sounds/Pac-man_theme_remix.mp3");
 	backgroundMusic.play();
@@ -60,12 +85,12 @@ function Start() {
 	start_time = new Date();
 
 
+
 	keysDown = {};
 	document.onkeydown = function (e) {
 		keysDown[e.keyCode] = true;
-		console.log(e.keyCode);
 	};
-		
+
 	addEventListener(
 		"keyup",
 		function (e) {
@@ -127,16 +152,16 @@ function setUpKey() {
 	document.onkeydown = function (e) {
 		up = e.keyCode;
 		let string = String.fromCharCode(e.keyCode);
-		if(e.keyCode == 38){
+		if (e.keyCode == 38) {
 			string = "ArrowUp"
 		}
-		else if(e.keyCode == 40){
+		else if (e.keyCode == 40) {
 			string = "ArrowDown"
 		}
-		else if(e.keyCode == 39){
+		else if (e.keyCode == 39) {
 			string = "ArrowRight"
 		}
-		else if(e.keyCode == 37){
+		else if (e.keyCode == 37) {
 			string = "ArrowLeft"
 		}
 		document.getElementById('up').innerHTML = string;
@@ -152,16 +177,16 @@ function setDownKey() {
 	document.onkeydown = function (e) {
 		down = e.keyCode;
 		let string = String.fromCharCode(e.keyCode);
-		if(e.keyCode == 38){
+		if (e.keyCode == 38) {
 			string = "ArrowUp"
 		}
-		else if(e.keyCode == 40){
+		else if (e.keyCode == 40) {
 			string = "ArrowDown"
 		}
-		else if(e.keyCode == 39){
+		else if (e.keyCode == 39) {
 			string = "ArrowRight"
 		}
-		else if(e.keyCode == 37){
+		else if (e.keyCode == 37) {
 			string = "ArrowLeft"
 		}
 		document.getElementById('down').innerHTML = string;
@@ -178,16 +203,16 @@ function setRightKey() {
 	document.onkeydown = function (e) {
 		right = e.keyCode;
 		let string = String.fromCharCode(e.keyCode);
-		if(e.keyCode == 38){
+		if (e.keyCode == 38) {
 			string = "ArrowUp"
 		}
-		else if(e.keyCode == 40){
+		else if (e.keyCode == 40) {
 			string = "ArrowDown"
 		}
-		else if(e.keyCode == 39){
+		else if (e.keyCode == 39) {
 			string = "ArrowRight"
 		}
-		else if(e.keyCode == 37){
+		else if (e.keyCode == 37) {
 			string = "ArrowLeft"
 		}
 		document.getElementById('right').innerHTML = string;
@@ -203,16 +228,16 @@ function setLeftKey() {
 	document.onkeydown = function (e) {
 		left = e.keyCode;
 		let string = String.fromCharCode(e.keyCode);
-		if(e.keyCode == 38){
+		if (e.keyCode == 38) {
 			string = "ArrowUp"
 		}
-		else if(e.keyCode == 40){
+		else if (e.keyCode == 40) {
 			string = "ArrowDown"
 		}
-		else if(e.keyCode == 39){
+		else if (e.keyCode == 39) {
 			string = "ArrowRight"
 		}
-		else if(e.keyCode == 37){
+		else if (e.keyCode == 37) {
 			string = "ArrowLeft"
 		}
 		document.getElementById('left').innerHTML = string;
@@ -226,11 +251,6 @@ function setLeftKey() {
 
 
 function GetKeyPressed() {
-	console.log("up" + up);
-	console.log("down" + down);
-	console.log("left" + left);
-	console.log("right" + right);
-
 	// up
 	if (keysDown[up]) {
 		return 1;
@@ -270,7 +290,6 @@ function UpdatePosition() {
 	let addBonus = '';
 	if (x) {
 		let res = board.updatePacmanPosition(x);
-		console.log(res);
 		addScore = res.score;
 		addBonus = res.bonus;
 	}
@@ -286,9 +305,10 @@ function UpdatePosition() {
 	}
 	var currentTime = new Date();
 	time_elapsed = Math.floor((currentTime - start_time) / 1000);
-	if (score >= 20 && time_elapsed <= 10) {
+	if (score >= 150 && time_elapsed <= 10) {
 		pac_color = "green";
 	}
+	console.log(board.foodRemain);
 	Draw();
 	this.checkIfGameEnd();
 }
@@ -331,14 +351,13 @@ function checkIfGameEnd() {
 		WinMusic.play();
 	}
 
-	if (lblTime.value <= '0') {
-		console.log(gameTime);
+	if (parseInt(lblTime.value) <= 0) {
 		if (score <= 100) {
 			setTimeout(endGameWindow("Time's up! You are better than " + score + " points!"), 200);
 			const lostMusic = new Audio("resources/sounds/Booing-sound-effect.mp3");
 			setTimeout(function () { lostMusic.play(); }, 10);
 		} else {
-			setTimeout(endGame("Time's up! You are Winner!!! your score is " + score), 200);
+			setTimeout(endGameWindow("Time's up! You are Winner!!! your score is " + score), 200);
 			WinMusic.play();
 		}
 	}
@@ -364,13 +383,13 @@ function leaveGame(menuButton) {
 			if (result) {
 				$("#gameDiv").hide();
 				if (menuButton == "welcome") {
-					$("#welcome").show(1000);
+					$("#welcomeDiv").show(1000);
 				}
 				else if (menuButton == "register") {
-					$("#register").slideDown(1000);
+					$("#registerDiv").slideDown(1000);
 				}
 				else if (menuButton == "login") {
-					$("#login").slideDown(1000);
+					$("#loginDiv").slideDown(1000);
 				}
 			}
 			else {
@@ -381,15 +400,25 @@ function leaveGame(menuButton) {
 				board.initMonsters();
 				interval = setInterval(UpdatePosition, 150);
 				monsterInterval = setInterval(updateMonstersPosition, 650);
-				}
+			}
 		}
 	});
 }
 
+function generatRandomNumber(min, max) {
+	return Math.floor(Math.random() * (max - min +1)) + min; 
+}
+
+function generateRandomColor() {
+	var letters = '0123456789ABCDEF';
+	var color = '#';
+	for (var i = 0; i < 6; i++) {
+	  color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
+  }
 /****************** jQuery ******************/
-//DB for users
-let DataBase = [];
-DataBase.push({ user: 'p', password: 'p' });
+
 /*
 $(function () {
 	$('.content').hide();
@@ -397,7 +426,40 @@ $(function () {
 });
 */
 
+function addUser(userInput, passwordInput) {
+	DataBase.push({ user: userInput, password: passwordInput });
+	bootbox.confirm({
+		title: "Registration completed successfully!",
+		message: "Do you want to start playing now?.",
+		buttons: {
+			cancel: {
+				label: 'Leter'
+			},
+			confirm: {
+				label: 'Yes!!!'
+			}
+		},
+		callback: function (result) {
+			if(result){
+				$(".content").hide();
+				$(".registerFormInput").val('');
+				$("#gameSettingsDiv").show();
+			}else{
+				$(".content").hide();
+				$(".registerFormInput").val('');
+				$("#welcomeDiv").show();
+			}
+		}
+	});
+}
 
+function userExists(username) {
+	let checkUser = DataBase.find(o => o.user === username);
+	if (checkUser) {
+		return true;
+	}
+	return false;
+}
 /*Welcome Screen*/
 $('#registerWelcome').on('click', function () {
 	$('#welcomeDiv').hide(500);
@@ -434,15 +496,22 @@ $('#registerMenu').on('click', function () {
 	if ($("#gameDiv").is(':visible')) {
 		leaveGame("register");
 	} else {
-		$('.content').hide();
+		$('.content').hide(500);
 		$(".loginForm").val('');
-		$('#register').show(500);
+		$('#registerDiv').show(500);
 	}
 
 });
 
 
-/*Register Form*/
+// /*Register Form*/
+// $('#registerButton').on('click', function (event) {
+// 	event.preventDefault();
+// 	event.stopPropagation();
+// 	$('#registerDiv').hide();
+// 	$('#gameSettingsDiv').show();
+// 	alert("You are a registered user now. Have FUN!!!!");
+// });
 
 /*Login Screen*/
 $('#loginButton').on('click', function (event) {
@@ -451,6 +520,8 @@ $('#loginButton').on('click', function (event) {
 	var loginAttributes = document.getElementsByClassName("loginForm");
 	var inputUsername = loginAttributes[0].value;
 	var inputPassword = loginAttributes[1].value;
+	console.log(inputUsername, inputPassword);
+	console.log(DataBase);
 	let checkUser = DataBase.find(o => o.user === inputUsername);
 	if (checkUser && checkUser.password == inputPassword) {
 		username = inputUsername;
@@ -464,18 +535,35 @@ $('#loginButton').on('click', function (event) {
 
 });
 
-/*Start Game*/
-$('#startGameButton').on('click', function (event) {
+// /*Start Game*/
+// $('#startGameButton').on('click', function (event) {
+// 	event.preventDefault();
+// 	event.stopPropagation();
+// 	var formInputs = $('.gameInputs');
+// 	// food_remain = formInputs[0].value; //validate
+// 	food_remain = formInputs[0].value;
+// 	smallFoodColor = formInputs[1].value;
+// 	mediumFoodColor = formInputs[2].value;
+// 	largeFoodColor = formInputs[3].value;
+// 	gameTime = parseInt(formInputs[4].value);
+// 	GAME_TIME = gameTime;
+// 	monsterAmount = parseInt($('#selectAmountOfMonsters').val());
+// 	$('#gameSettingsDiv').hide();
+// 	$('#gameDiv').show();
+// 	Start();
+// });
+
+/*Start Random Game*/
+$('#startRandomGameButton').on('click', function (event) {
 	event.preventDefault();
 	event.stopPropagation();
-	var formInputs = $('.gameInputs');
-	food_remain = formInputs[0].value; //validate
-	smallFoodColor = formInputs[1].value;
-	mediumFoodColor = formInputs[2].value;
-	largeFoodColor = formInputs[3].value;
-	gameTime = parseInt(formInputs[4].value);
+	food_remain = generatRandomNumber(60,90);
+	smallFoodColor = generateRandomColor();
+	mediumFoodColor = generateRandomColor();
+	largeFoodColor = generateRandomColor();
+	gameTime = generatRandomNumber(60,180);
 	GAME_TIME = gameTime;
-	monsterAmount = parseInt($('#selectAmountOfMonsters').val());
+	monsterAmount = generatRandomNumber(1,4);
 	$('#gameSettingsDiv').hide();
 	$('#gameDiv').show();
 	Start();
@@ -500,8 +588,8 @@ $('#newGame').on('click', function (event) {
 		},
 		callback: function (result) {
 			if (result) {
-				lifes=5;
-				gameTime=GAME_TIME;
+				lifes = 5;
+				gameTime = GAME_TIME;
 				Start();
 				// gameTime = parseInt(formInputs[4].value);
 
@@ -529,9 +617,175 @@ $('#newGame').on('click', function (event) {
 $('#aboutMenu').on('click', function (event) {
 	bootbox.alert({
 		message: "This PacMan game was developed by Naor Ben Evgi & Roy Judes, B.Sc Third Year Software and Information System Engineering Student in Ben Gurion University of the Negev" +
-			"<br/><br/>" + "<strong>The most difficult part was to make the monster chase after the Pacman icon.</strong>",
+			"<br/><br/>" + "<strong>The most difficult part was to make the monster chase after the Pacman icon.</strong>" +
+			"<br/><br/>" + "<strong>We used jQuery Validation Plugin.</strong>",
 		backdrop: true
 	});
 });
 
 
+$(document).ready(function () {
+	$("#registerForm").validate({
+		rules: {
+			username: {
+				required: true,
+				isUserInDB: true
+			},
+			first_name: {
+				required: true,
+				lettersonly: true,
+				nowhitespace: true
+			},
+			last_name: {
+				required: true,
+				nowhitespace: true,
+				lettersonly: true
+			},
+			birth_date: {
+				required: true,
+				date: true,
+			},
+			email: {
+				required: true,
+				email: true,
+				isEmailValid: true
+			},
+			password: {
+				required: true,
+				checkPassword: true
+			},
+			confirm_password: {
+				required: true,
+				equalTo: '#password'
+			}
+		},
+		messages: {
+			userName: {
+				required: 'Username is a requird field.'
+			},
+			first_name: {
+				required: 'First name is a requird field.',
+			},
+			last_name: {
+				required: 'Last name is a requird field.',
+			},
+			birth_date: {
+				required: 'Birth date is a requird field.',
+			},
+			email: {
+				required: 'Email address is a requird field.',
+				email: 'E-mail address is not valid.',
+			},
+			password: {
+				required: 'Password is a requird field.',
+			},
+			confirm_password: {
+				required: 'Confirm password again is a requird field.',
+				equalTo: 'Please select the same password.',
+			},
+		},
+		submitHandler: function (form) {
+			let tmpUser = (String)(document.getElementById("userInput").value);
+			let tmpPassword = (String)(document.getElementById("password").value);
+			addUser(tmpUser, tmpPassword);
+		}
+	});
+});
+
+
+
+$(document).ready(function () {
+	$("#loginForm").validate({
+		rules: {
+			username: {
+				required: true,
+			},
+			loginPassword: {
+				required: true,
+			}
+		},
+		messages: {
+			userName: {
+				required: 'Username is a requird field.'
+			},
+			password: {
+				required: 'Password is a requird field.',
+			},
+		},
+	});
+});
+
+$(document).ready(function () {
+	$("#startGameForm").validate({
+		rules: {
+			food: {
+				required: true,
+				checkFoodAmount: true,
+			},
+			time: {
+				required: true,
+				checkTimeForGame: true
+			}
+		},
+		messages: {
+			userName: {
+				required: 'Username is a requird field.'
+			},
+			password: {
+				required: 'Password is a requird field.',
+			},
+		},
+		submitHandler: function (form) {
+			event.preventDefault();
+			event.stopPropagation();
+			var formInputs = $('.gameInputs');
+			// food_remain = formInputs[0].value; //validate
+			food_remain = formInputs[0].value;
+			smallFoodColor = formInputs[1].value;
+			mediumFoodColor = formInputs[2].value;
+			largeFoodColor = formInputs[3].value;
+			gameTime = parseInt(formInputs[4].value);
+			GAME_TIME = gameTime;
+			monsterAmount = parseInt($('#selectAmountOfMonsters').val());
+			$('#gameSettingsDiv').hide();
+			$('#gameDiv').show();
+			Start();
+		}
+	});
+});
+
+$(function () {
+	//**********validation methods - Registration******************
+	//check if user exists in the DB
+	$.validator.addMethod('isUserInDB', function (value, element) {
+		return this.optional(element)
+			|| !(userExists(value));
+	}, 'Username already exists.');
+
+	//check if the email is valid
+	$.validator.addMethod('isEmailValid', function (value, element) {
+		return this.optional(element)
+			|| (value.trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/));
+	}, 'please put a valid email.');
+
+	//check if the password is valid (a combination of numbers and lettes, at least 6 chars)
+	$.validator.addMethod('checkPassword', function (value, element) {
+		return this.optional(element)
+			|| value.length >= 6
+			&& /\d/.test(value)
+			&& /[a-z]/i.test(value);
+	}, 'The password has to be at least 6 characters long combined of numbers and letters\'.');
+
+
+	//**********validation methods - Game Setting ******************
+	$.validator.addMethod('checkFoodAmount', function (value, element) {
+		return this.optional(element)
+			|| value >= 50 && value <= 90;
+	}, 'Food amount has to be between 50 to 90.');
+
+	$.validator.addMethod('checkTimeForGame', function (value, element) {
+		return this.optional(element)
+			|| value >= 60;
+	}, 'Time needs to be more than 60 seconds.');
+
+});
