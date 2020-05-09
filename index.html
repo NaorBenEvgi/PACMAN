@@ -1,29 +1,308 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-	<script src="./jquery-3.4.1.slim.min.js"></script>
-	<script src="./components/pacman.js"></script>
-	<script src="./components/food.js"></script>
-	<script src="./components/wall.js"></script>
-	<script src="./components/monster.js"></script>
-	<script type="text/javascript" src="./app.js"></script>
+    <title>Pacman</title>
+    <link rel="icon" type="image/png" href="resources/Pacman-Ghost-512.png" />
+    <link rel="stylesheet" type="text/css" href="pacman.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="./jquery-3.4.1.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/additional-methods.js"></script>
+    <title>Pacman - Naor and Roy</title>
 </head>
 
 <body>
-	<!--------------------- Header --------------------->
+    <!--------------------- Menu --------------------->
 
-	<div id="score">
-		<label for="lblScore">SCORE:</label>
-		<input id="lblScore" type="text" />
-	</div>
-	<div id="time">
-		<label for="lblTime">TIME:</label>
-		<input id="lblTime" type="text" />
-	</div>
-	<div id="game">
-		<canvas id="canvas" height="600" width="600"></canvas>
-	</div>
+    <header>
+        <a href="" class="logo"></a>
+        <a class="menu-link" id="homeMenu" href="javascript:void(0)">Home</a>
+        <a class="menu-link" id="loginMenu" href="javascript:void(0)">Login</a>
+        <a class="menu-link" id="registerMenu" href="javascript:void(0)">Register</a>
+        <a class="menu-link" id="aboutMenu" href="javascript:void(0)">About</a>
+    </header>
+    <!--------------------- Main --------------------->
+
+    <main>
+        <!--------------------- Welcome --------------------->
+
+        <div class="content" id="welcomeDiv">
+            <div class="btn-container">
+                <a class="welcome-btn" id="registerWelcome">
+                    Register
+                </a>
+                <a class="welcome-btn" id="loginWelcome">
+                    Login
+                </a>
+            </div>
+
+        </div>
+
+        <!--------------------- Login ---------------------->
+
+        <div class="content content-bg" id="loginDiv">
+            <form id="loginForm">
+                <span class="title" id="login-title">
+                    Login
+                </span>
+                <div class="login-input" data-validate="User name is required">
+                    <input class="input100 loginForm" type="text" name="loginUsername" placeholder="User name">
+                    <span></span>
+                    <span>
+                    </span>
+                </div>
+
+                <div class="login-input" data-validate="Password is required">
+                    <input class="input100 loginForm" type="password" name="loginPassword" placeholder="Password">
+                    </span>
+                </div>
+
+                <div>
+                    <a id="loginButton">
+                        Login
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!------------------- Register --------------------->
+
+        <div class="content content-bg" id="registerDiv">
+            <form id="registerForm">
+                <span class="title small-title" id="register-title">
+                    Register for playing PacMan!
+                </span>
+
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <div data-validate="User name is required">
+                                <input class="register-input registerFormInput" id="userInput" type="text"
+                                    name="username" placeholder="User name (required)">
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div data-validate="First name is required">
+                                <input class="register-input registerFormInput" type="text" name="first_name"
+                                    placeholder="First name (required)">
+                            </div>
+                        </td>
+                        <td>
+                            <div  data-validate="Last name is required">
+                                <input class="register-input registerFormInput" type="text" name="last_name"
+                                    placeholder="Last name (required)">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div data-validate="Email is required">
+                                <input class="register-input registerFormInput" type="email" name="email"
+                                    placeholder="E-mail (required)">
+                            </div>
+                        </td>
+                        <td>
+                            <div  data-validate="Date of birth is required">
+                                <input class="register-input registerFormInput" type="date" name="birth_date"
+                                    placeholder="Date of Birth (required)">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div  data-validate="Password is required">
+                                <input class="register-input registerFormInput" type="password" id="password"
+                                    name="password" placeholder="Password (required)">
+                            </div>
+                        </td>
+                        <td>
+                            <div  data-validate="Password is required">
+                                <input class="register-input registerFormInput" type="password" id="confirm_password"
+                                    name="confirm_password" placeholder="confirm password (required)">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div id="register-btns">
+                    <div class="register-btn">
+                        <input type="reset" value="Reset" id="resetButton">
+                    </div>
+
+                    <div class="register-btn blue">
+                        <input class="register-action-input" id="registerButton" type="submit" value="Register">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!--------------------- Setting ---------------------->
+        <div id="gameSettingsDiv" class="content content-bg">
+            <span class="title">
+                Setting
+            </span>
+            <form class="setting-table" id="startGameForm">
+                <table>
+                    <tr class="row-setting">
+                        <td class="setting-row-title">
+                            Number of points
+                        </td>
+                        <td>
+                            <div>
+                                <input class="gameInputs input100" name="food" type="text" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="row-setting">
+                        <td class="setting-row-title">
+                            5 worth points color
+                        </td>
+                        <td class="color-input">
+                            <div class="settings">
+                                <input class="gameInputs input100" name="food5" type="color" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="row-setting">
+                        <td class="setting-row-title">
+                            15 worth points color
+                        </td>
+                        <td class="color-input">
+                            <div class="settings">
+                                <input class="gameInputs input100" name="food10" type="color" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="row-setting">
+                        <td class="setting-row-title">
+                            25 worth points color
+                        </td>
+                        <td class="color-input">
+                            <div class="settings">
+                                <input class="gameInputs input100" name="food25" type="color" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="row-setting">
+                        <td class="setting-row-title">
+                            Time for game (seconds)
+                        </td>
+                        <td>
+                            <div class="settings">
+
+                                <input class="gameInputs input100" name="time" type="text" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="row-setting">
+                        <td class="setting-row-title">
+                            Number of monsters
+                        </td>
+                        <td>
+                            <div class="settings">
+                                <select id="selectAmountOfMonsters" class="input100">
+                                    <option value="1">1 Monster</option>
+                                    <option value="2">2 Monsters</option>
+                                    <option value="3">3 Monsters</option>
+                                    <option value="4">4 Monsters</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="row-setting">
+                        <td class="setting-row-title">
+                            Set arrows keys
+                        </td>
+                        <td>
+                            <div class="settings">
+                                <a class="gameKeys" id="key-up" onclick="setUpKey()">UP</a>
+                                <dialog class="setKeys" id="upWindow">
+                                    <p>please press a key</p>
+                                    <span class="dialogKeys" id="up"></span>
+                                    <a id="upOk">Ok</a>
+                                </dialog>
+                                <a class="gameKeys" id="key-down" onclick="setDownKey()">DOWN</a>
+                                <dialog class="setKeys" id="downWindow">
+                                    <p>please press a key</p>
+                                    <span class="dialogKeys" id="down"></span>
+                                    <a id="downOk">Ok</a>
+                                </dialog>
+                                <a class="gameKeys" id="key-right" onclick="setRightKey()">RIGHT</a>
+                                <dialog class="setKeys" id="rightWindow">
+                                    <p>please press a key</p>
+                                    <span class="dialogKeys" id="right"></span>
+                                    <a id="rightOk">Ok</a>
+                                </dialog>
+                                <a class="gameKeys" id="key-left" onclick="setLeftKey()">LEFT</a>
+                                <dialog class="setKeys" id="leftWindow">
+                                    <p>please press a key</p>
+                                    <span class="dialogKeys" id="left"></span>
+                                    <a id="leftOk">Ok</a>
+                                </dialog>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    <input id="startGameButton" type="submit" value="Start Game">
+                    <input id="startRandomGameButton" type="button" value="Start A Random Game">
+                </div>
+            </form>
+        </div>
+
+        <!-- The Game -->
+
+        <div id="gameDiv" class="content content-bg">
+
+            <span id="username"></span>
+            <div id="gameLabels">
+                <span class="game-label">SCORE:
+                    <input class="gamelbl" id="lblScore" type="text" readonly="readonly" />
+                </span>
+                <span class="game-label">TIME:
+                    <input class="gamelbl" id="lblTime" type="text" readonly="readonly" />
+                </span>
+                <span class="game-label">LIFES:
+                    <input class="gamelbl" id="lblLifes" type="text" readonly="readonly" />
+                </span>
+                <div id="container">
+                </div>
+            </div>
+            <canvas id="canvas" height="600" width="600"></canvas>
+            <button id="newGame">New Game</button>
+        </div>
+
+        <!--------------------- About --------------------->
+
+    </main>
+    <footer class="footer">
+        <p class="footer-text">Contact us </p>
+        <p class="footer-text">Email: naorbe@post.bgu.ac.il / royju@post.bgu.ac.il </p>
+        <p class="footer-text">&copy Naor Ben Evgi & Roy Judes </p>
+        <script src="./components/pacman.js"></script>
+        <script src="./components/food.js"></script>
+        <script src="./components/extraFood.js"></script>
+        <script src="./components/wall.js"></script>
+        <script src="./components/monster.js"></script>
+        <script src="./components/bonus.js"></script>
+        <script src="./components/cell.js"></script>
+        <script src="./components/board.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+        <script type="text/javascript" src="./app.js"></script>
+    </footer>
+
 </body>
 
 </html>

@@ -1,6 +1,8 @@
 class Pacman {
-    constructor(context) {
+    constructor(context, direction) {
         this.context = context;
+        this.direction = direction;
+        this.color = 'yellow';
         this.directions = {
             "up": 1,
             "down": 2,
@@ -9,7 +11,13 @@ class Pacman {
         }
     }
 
-    draw(center, direction) {
+    move() { }
+
+    type() {
+        return "pacman";
+    }
+
+    draw(center) {
         const context = this.context;
         let start;
         let end;
@@ -17,8 +25,7 @@ class Pacman {
 
         // Body
         context.beginPath();
-        console.log(direction);
-        if (this.directions.left == direction) {
+        if (this.directions.left == this.direction) {
             start = Math.PI * 1.15;
             end = Math.PI * 0.85;
             eye = {
@@ -27,7 +34,7 @@ class Pacman {
 
             }
         }
-        else if (this.directions.right == direction) {
+        else if (this.directions.right == this.direction) {
             start = Math.PI * 0.15;
             end = Math.PI * 1.85;
             eye = {
@@ -36,7 +43,7 @@ class Pacman {
 
             }
         }
-        else if (this.directions.up == direction) {
+        else if (this.directions.up == this.direction) {
             start = Math.PI * 1.65;
             end = Math.PI * 1.35;
             eye = {
@@ -56,7 +63,7 @@ class Pacman {
         }
         context.arc(center.x, center.y, 30, start, end); // half circle
         context.lineTo(center.x, center.y);
-        context.fillStyle = pac_color; //color
+        context.fillStyle = this.color; //color
         context.fill();
 
         // Eye 
