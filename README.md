@@ -23,7 +23,7 @@ To start playing the game in Demo version click [HERE](https://git.io/JkZwP)
   * Getting extra 20 second if the pacman eats the clock icon.
   * Getting extra score if the pacman eats the gift icon.
   
-## Screen shot
+## Screenshots
 ![Home](https://github.com/NaorBenEvgi/PACMAN/blob/master/resources/home.png)
 ![Game](https://github.com/NaorBenEvgi/PACMAN/blob/master/resources/game.png)
 
